@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.env
+
+# Data
+data/bronze/
+data/silver/
+data/gold/
+*.csv
+*.json
+*.parquet
+
+# Airflow local
+airflow/
+logs/
+
+# OS/Editor
+.DS_Store
+.ipynb_checkpoints/
+.vscode/
+.envrc
