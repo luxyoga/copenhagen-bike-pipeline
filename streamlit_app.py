@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 """
-Copenhagen Bike Analytics - Full Dashboard
-Complete dashboard with all features: monthly analysis, seasonal patterns, weather impact, and interactive visualizations
+Copenhagen Bike Analytics - Simplified Version
 """
 
 import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
-import plotly.graph_objects as go
 
 # Page config
 st.set_page_config(
@@ -19,61 +17,43 @@ st.set_page_config(
 
 @st.cache_data
 def get_data():
-    """Generate realistic Copenhagen cycling data with all features"""
+    """Generate realistic Copenhagen cycling data"""
     np.random.seed(42)
     
     # Create 10 years of data (2005-2014)
     dates = pd.date_range('2005-01-01', '2014-12-31', freq='D')
-    
-    # Copenhagen cycling locations
-    locations = [
-        'Nørrebrogade', 'Amagerbrogade', 'Englandsvej', 'Vesterbrogade',
-        'Østerbrogade', 'Frederiksberg Allé', 'Gammel Kongevej', 'Blegdamsvej',
-        'Roskildevej', 'Jagtvej', 'Nørre Farimagsgade', 'Vester Farimagsgade'
-    ]
+    locations = ['Nørrebrogade', 'Amagerbrogade', 'Englandsvej', 'Vesterbrogade', 'Østerbrogade']
     
     data = []
     for date in dates:
         for location in locations:
-            # Base seasonal patterns
+            # Seasonal patterns
             month = date.month
             if month in [6, 7, 8]:  # Summer
-                base_rides = np.random.poisson(450)
+                rides = np.random.poisson(450)
                 temp = np.random.normal(18, 4)
             elif month in [12, 1, 2]:  # Winter
-                base_rides = np.random.poisson(180)
+                rides = np.random.poisson(180)
                 temp = np.random.normal(2, 3)
-            elif month in [3, 4, 5]:  # Spring
-                base_rides = np.random.poisson(320)
-                temp = np.random.normal(12, 4)
-            else:  # Autumn
-                base_rides = np.random.poisson(280)
-                temp = np.random.normal(8, 4)
+            else:  # Spring/Autumn
+                rides = np.random.poisson(300)
+                temp = np.random.normal(10, 4)
             
             # Weekend effect
             if date.weekday() >= 5:
-                base_rides = int(base_rides * 0.7)
+                rides = int(rides * 0.8)
             
-            # Weather effects
+            # Weather effect
             if temp < 5:
                 weather = 'cold'
-                base_rides = int(base_rides * 0.6)
+                rides = int(rides * 0.6)
             elif temp > 20:
                 weather = 'sunny'
-                base_rides = int(base_rides * 1.4)
-            elif temp > 15:
-                weather = 'cloudy'
-                base_rides = int(base_rides * 1.1)
+                rides = int(rides * 1.3)
             else:
                 weather = 'cloudy'
             
-            # Location-specific effects
-            if 'Nørrebrogade' in location:
-                base_rides = int(base_rides * 1.3)  # Busiest street
-            elif 'Amagerbrogade' in location:
-                base_rides = int(base_rides * 1.2)
-            
-            rides = max(base_rides, 20)
+            rides = max(rides, 20)
             
             data.append({
                 'day': date,
@@ -123,7 +103,7 @@ def main():
 
     st.markdown("---")
     
-    # Monthly analysis with dropdown
+    # Monthly analysis
     st.header("📅 Monthly Analysis")
     
     # Create year-month combinations
@@ -152,70 +132,16 @@ def main():
         with col3:
             st.metric(f"Days in {selected_year_month}", month_df['day'].nunique())
         
-        # Daily trend for selected month with temperature
+        # Daily trend for selected month
         st.subheader(f"📈 Daily Rides Trend - {selected_year_month}")
         daily_rides_month = month_df.groupby('day')['total'].sum().reset_index()
-        daily_temp_month = month_df.groupby('day')['temperature'].mean().reset_index()
         
-        # Check if we have data
-        if len(daily_rides_month) == 0 or len(daily_temp_month) == 0:
-            st.warning("No data available for the selected month.")
-        else:
-            # Create a simple chart first
-            try:
-                # Create basic line chart for rides
-                fig_daily = px.line(daily_rides_month, x='day', y='total', 
-                                   title=f"Daily Rides - {selected_year_month}",
-                                   labels={'total': 'Total Rides', 'day': 'Date'})
-                fig_daily.update_layout(height=400)
-                
-                # Try to add temperature line
-                try:
-                    # Add temperature as secondary y-axis
-                    fig_daily.add_trace(go.Scatter(
-                        x=daily_temp_month['day'],
-                        y=daily_temp_month['temperature'],
-                        mode='lines+markers',
-                        name='Temperature (°C)',
-                        line=dict(color='#ff7f0e', width=2),
-                        yaxis='y2'
-                    ))
-                    
-                    # Update layout with secondary y-axis
-                    fig_daily.update_layout(
-                        yaxis2=dict(
-                            title="Temperature (°C)",
-                            overlaying='y',
-                            side='right',
-                            titlefont=dict(color='#ff7f0e'),
-                            tickfont=dict(color='#ff7f0e')
-                        ),
-                        legend=dict(
-                            orientation="h",
-                            yanchor="bottom",
-                            y=1.02,
-                            xanchor="right",
-                            x=1
-                        )
-                    )
-                except Exception as e:
-                    st.warning(f"Could not add temperature line: {str(e)}")
-                
-                st.plotly_chart(fig_daily, use_container_width=True)
-                
-                # Add correlation info
-                try:
-                    correlation = daily_rides_month['total'].corr(daily_temp_month['temperature'])
-                    if pd.isna(correlation):
-                        st.info("📊 **Temperature-Rides Correlation**: Not enough data to calculate correlation")
-                    else:
-                        st.info(f"📊 **Temperature-Rides Correlation**: {correlation:.3f} (Values closer to 1.0 indicate stronger positive correlation)")
-                except Exception as e:
-                    st.warning(f"Could not calculate correlation: {str(e)}")
-                    
-            except Exception as e:
-                st.error(f"Error creating chart: {str(e)}")
-                st.warning("Unable to display chart for this month.")
+        # Simple line chart
+        fig_daily = px.line(daily_rides_month, x='day', y='total', 
+                           title=f"Daily Rides - {selected_year_month}",
+                           labels={'total': 'Total Rides', 'day': 'Date'})
+        fig_daily.update_layout(height=400)
+        st.plotly_chart(fig_daily, use_container_width=True)
         
         # Top locations for selected month
         st.subheader(f"🏆 Top Locations - {selected_year_month}")
@@ -247,7 +173,6 @@ def main():
     col1, col2 = st.columns(2)
     
     with col1:
-        st.subheader("📊 Total Rides by Season (10 Years)")
         fig_seasonal = px.bar(seasonal_summary, x='season', y='total',
                              title="Total Rides by Season (2005-2014)",
                              color='season',
@@ -260,7 +185,6 @@ def main():
         st.plotly_chart(fig_seasonal, use_container_width=True)
     
     with col2:
-        st.subheader("📈 Average Daily Rides by Season")
         fig_avg = px.bar(seasonal_summary, x='season', y='avg_daily',
                         title="Average Daily Rides by Season (2005-2014)",
                         color='season',
@@ -279,7 +203,6 @@ def main():
     
     with col1:
         st.subheader("🌡️ Temperature vs Bike Usage")
-        # Create more descriptive temperature bins with actual ranges
         temp_bins = pd.cut(df['temperature'], 
                           bins=[-10, 0, 5, 10, 15, 20, 30], 
                           labels=['Very Cold (<0°C)', 'Cold (0-5°C)', 'Cool (5-10°C)', 
@@ -300,7 +223,6 @@ def main():
     
     with col2:
         st.subheader("🌧️ Precipitation Impact")
-        # Create more descriptive precipitation bins with actual ranges
         precip_bins = pd.cut(df['precipitation'], 
                            bins=[0, 0.1, 2, 5, 20], 
                            labels=['No Rain (0mm)', 'Light Rain (0-2mm)', 
@@ -318,40 +240,6 @@ def main():
             xaxis={'tickangle': 45}
         )
         st.plotly_chart(fig_precip, use_container_width=True)
-    
-    # Weather conditions summary
-    st.subheader("🌤️ Weather Conditions Summary (2005-2014)")
-    weather_summary = df.groupby('weather_condition').agg({
-        'total': 'sum',
-        'day': 'nunique'
-    }).reset_index()
-    weather_summary['avg_daily'] = weather_summary['total'] / weather_summary['day']
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        fig_weather = px.bar(weather_summary, x='weather_condition', y='total',
-                           title="Total Rides by Weather Condition (2005-2014)",
-                           color='weather_condition',
-                           color_discrete_sequence=px.colors.qualitative.Set2)
-        fig_weather.update_layout(
-            xaxis_title="Weather Condition",
-            yaxis_title="Total Rides (10 Years)",
-            showlegend=False
-        )
-        st.plotly_chart(fig_weather, use_container_width=True)
-    
-    with col2:
-        fig_weather_avg = px.bar(weather_summary, x='weather_condition', y='avg_daily',
-                               title="Average Daily Rides by Weather Condition (2005-2014)",
-                               color='weather_condition',
-                               color_discrete_sequence=px.colors.qualitative.Set2)
-        fig_weather_avg.update_layout(
-            xaxis_title="Weather Condition",
-            yaxis_title="Average Daily Rides",
-            showlegend=False
-        )
-        st.plotly_chart(fig_weather_avg, use_container_width=True)
     
     # Top locations overall
     st.header("🏆 Top Cycling Locations (2005-2014 - All 10 Years)")
