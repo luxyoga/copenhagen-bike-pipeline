@@ -185,7 +185,7 @@ def main():
     st.markdown("---")
     
     # Seasonal analysis
-    st.header("🍂 Seasonal Analysis")
+    st.header("🍂 Seasonal Analysis (2005-2014 - All 10 Years)")
     seasonal_summary = df.groupby('season').agg({
         'total': 'sum',
         'day': 'nunique'
@@ -195,23 +195,80 @@ def main():
     col1, col2 = st.columns(2)
     
     with col1:
-        st.subheader("📊 Seasonal Totals")
+        st.subheader("📊 Total Rides by Season (10 Years)")
         fig_seasonal = px.bar(seasonal_summary, x='season', y='total',
-                             title="Total Rides by Season",
+                             title="Total Rides by Season (2005-2014)",
                              color='season',
                              color_discrete_sequence=px.colors.qualitative.Set3)
+        fig_seasonal.update_layout(
+            xaxis_title="Season",
+            yaxis_title="Total Rides (10 Years)",
+            showlegend=False
+        )
         st.plotly_chart(fig_seasonal, use_container_width=True)
     
     with col2:
         st.subheader("📈 Average Daily Rides by Season")
         fig_avg = px.bar(seasonal_summary, x='season', y='avg_daily',
-                        title="Average Daily Rides by Season",
+                        title="Average Daily Rides by Season (2005-2014)",
                         color='season',
                         color_discrete_sequence=px.colors.qualitative.Set3)
+        fig_avg.update_layout(
+            xaxis_title="Season",
+            yaxis_title="Average Daily Rides",
+            showlegend=False
+        )
         st.plotly_chart(fig_avg, use_container_width=True)
     
     # Weather impact analysis
-    st.header("🌤️ Weather Impact Analysis")
+    st.header("🌤️ Weather Impact Analysis (2005-2014)")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.subheader("🌡️ Temperature vs Bike Usage")
+        # Create more descriptive temperature bins with actual ranges
+        temp_bins = pd.cut(df['temperature'], 
+                          bins=[-10, 0, 5, 10, 15, 20, 30], 
+                          labels=['Very Cold (<0°C)', 'Cold (0-5°C)', 'Cool (5-10°C)', 
+                                 'Mild (10-15°C)', 'Warm (15-20°C)', 'Hot (>20°C)'])
+        temp_usage = df.groupby(temp_bins)['total'].mean().reset_index()
+        temp_usage.columns = ['Temperature Range', 'Avg Rides']
+        
+        fig_temp = px.bar(temp_usage, x='Temperature Range', y='Avg Rides',
+                         title="Average Rides by Temperature Range (2005-2014)",
+                         color='Avg Rides',
+                         color_continuous_scale='RdYlBu_r')
+        fig_temp.update_layout(
+            xaxis_title="Temperature Range",
+            yaxis_title="Average Daily Rides",
+            xaxis={'tickangle': 45}
+        )
+        st.plotly_chart(fig_temp, use_container_width=True)
+    
+    with col2:
+        st.subheader("🌧️ Precipitation Impact")
+        # Create more descriptive precipitation bins with actual ranges
+        precip_bins = pd.cut(df['precipitation'], 
+                           bins=[0, 0.1, 2, 5, 20], 
+                           labels=['No Rain (0mm)', 'Light Rain (0-2mm)', 
+                                  'Moderate Rain (2-5mm)', 'Heavy Rain (>5mm)'])
+        precip_usage = df.groupby(precip_bins)['total'].mean().reset_index()
+        precip_usage.columns = ['Precipitation Level', 'Avg Rides']
+        
+        fig_precip = px.bar(precip_usage, x='Precipitation Level', y='Avg Rides',
+                           title="Average Rides by Precipitation Level (2005-2014)",
+                           color='Avg Rides',
+                           color_continuous_scale='Blues')
+        fig_precip.update_layout(
+            xaxis_title="Precipitation Level",
+            yaxis_title="Average Daily Rides",
+            xaxis={'tickangle': 45}
+        )
+        st.plotly_chart(fig_precip, use_container_width=True)
+    
+    # Weather conditions summary
+    st.subheader("🌤️ Weather Conditions Summary (2005-2014)")
     weather_summary = df.groupby('weather_condition').agg({
         'total': 'sum',
         'day': 'nunique'
@@ -221,31 +278,31 @@ def main():
     col1, col2 = st.columns(2)
     
     with col1:
-        st.subheader("🌡️ Temperature vs Bike Usage")
-        temp_bins = pd.cut(df['temperature'], bins=5, labels=['Very Cold', 'Cold', 'Mild', 'Warm', 'Hot'])
-        temp_usage = df.groupby(temp_bins)['total'].mean().reset_index()
-        temp_usage.columns = ['Temperature Range', 'Avg Rides']
-        
-        fig_temp = px.bar(temp_usage, x='Temperature Range', y='Avg Rides',
-                         title="Average Rides by Temperature Range",
-                         color='Avg Rides',
-                         color_continuous_scale='RdYlBu_r')
-        st.plotly_chart(fig_temp, use_container_width=True)
+        fig_weather = px.bar(weather_summary, x='weather_condition', y='total',
+                           title="Total Rides by Weather Condition (2005-2014)",
+                           color='weather_condition',
+                           color_discrete_sequence=px.colors.qualitative.Set2)
+        fig_weather.update_layout(
+            xaxis_title="Weather Condition",
+            yaxis_title="Total Rides (10 Years)",
+            showlegend=False
+        )
+        st.plotly_chart(fig_weather, use_container_width=True)
     
     with col2:
-        st.subheader("🌧️ Precipitation Impact")
-        precip_bins = pd.cut(df['precipitation'], bins=4, labels=['No Rain', 'Light Rain', 'Moderate Rain', 'Heavy Rain'])
-        precip_usage = df.groupby(precip_bins)['total'].mean().reset_index()
-        precip_usage.columns = ['Precipitation', 'Avg Rides']
-        
-        fig_precip = px.bar(precip_usage, x='Precipitation', y='Avg Rides',
-                           title="Average Rides by Precipitation",
-                           color='Avg Rides',
-                           color_continuous_scale='Blues')
-        st.plotly_chart(fig_precip, use_container_width=True)
+        fig_weather_avg = px.bar(weather_summary, x='weather_condition', y='avg_daily',
+                               title="Average Daily Rides by Weather Condition (2005-2014)",
+                               color='weather_condition',
+                               color_discrete_sequence=px.colors.qualitative.Set2)
+        fig_weather_avg.update_layout(
+            xaxis_title="Weather Condition",
+            yaxis_title="Average Daily Rides",
+            showlegend=False
+        )
+        st.plotly_chart(fig_weather_avg, use_container_width=True)
     
     # Top locations overall
-    st.header("🏆 Top Cycling Locations")
+    st.header("🏆 Top Cycling Locations (2005-2014 - All 10 Years)")
     top_locations = df.groupby('counter_key')['total'].sum().sort_values(ascending=False).head(20)
     
     fig_top = px.bar(
@@ -256,7 +313,7 @@ def main():
         height=600
     )
     fig_top.update_layout(
-        xaxis_title="Total Rides",
+        xaxis_title="Total Rides (10 Years)",
         yaxis_title="Location",
         yaxis={'categoryorder':'total ascending'}
     )
