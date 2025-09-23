@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """
-Copenhagen Bike Analytics - Simple Cloud Version
+Copenhagen Bike Analytics - Minimal Cloud Version
 """
 
 import streamlit as st
 import pandas as pd
 import numpy as np
-import plotly.express as px
 
 # Page config
 st.set_page_config(page_title="Copenhagen Bike Analytics", layout="wide")
@@ -106,28 +105,30 @@ if not month_df.empty:
     with col3:
         st.metric("Days", f"{month_df['day'].nunique()}")
     
-    # Daily trends
+    # Daily trends - using st.line_chart
+    st.subheader("📈 Daily Trends")
     daily_trends = month_df.groupby('day')['rides'].sum().reset_index()
-    fig = px.line(daily_trends, x='day', y='rides', title=f"Daily Rides - {pd.Timestamp(2020, month, 1).strftime('%B')}")
-    st.plotly_chart(fig, use_container_width=True)
+    daily_trends = daily_trends.set_index('day')
+    st.line_chart(daily_trends)
     
-    # Top locations
+    # Top locations - using st.bar_chart
+    st.subheader("🏆 Top Locations")
     location_totals = month_df.groupby('location')['rides'].sum().sort_values(ascending=True)
-    fig2 = px.bar(location_totals.reset_index(), x='rides', y='location', orientation='h', 
-                  title=f"Top Locations - {pd.Timestamp(2020, month, 1).strftime('%B')}")
-    st.plotly_chart(fig2, use_container_width=True)
+    st.bar_chart(location_totals)
 
 # Seasonal analysis
 st.header("🍂 Seasonal Analysis")
-seasonal_data = df.groupby('season')['rides'].sum().reset_index()
-fig3 = px.bar(seasonal_data, x='rides', y='season', orientation='h', title="Rides by Season")
-st.plotly_chart(fig3, use_container_width=True)
+seasonal_data = df.groupby('season')['rides'].sum()
+st.bar_chart(seasonal_data)
 
 # Weather analysis
 st.header("🌤️ Weather Impact")
-weather_data = df.groupby('weather')['rides'].mean().reset_index()
-fig4 = px.bar(weather_data, x='weather', y='rides', title="Average Rides by Weather")
-st.plotly_chart(fig4, use_container_width=True)
+weather_data = df.groupby('weather')['rides'].mean()
+st.bar_chart(weather_data)
+
+# Data table
+st.header("📊 Raw Data Sample")
+st.dataframe(df.head(100))
 
 st.markdown("---")
 st.markdown("🚴‍♂️ **Copenhagen Bike Analytics** | Real cycling data from Copenhagen (2005-2014)")
