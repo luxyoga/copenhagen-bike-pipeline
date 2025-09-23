@@ -125,35 +125,38 @@ def main():
     
     # Monthly analysis with dropdown
     st.header("📅 Monthly Analysis")
-    month_options = sorted(df['month'].unique())
-    month_names = [pd.Timestamp(2020, m, 1).strftime('%B') for m in month_options]
-    month_mapping = dict(zip(month_names, month_options))
     
-    selected_month_name = st.selectbox("Select Month:", month_names)
-    selected_month = month_mapping[selected_month_name]
+    # Create year-month combinations
+    df['year_month'] = df['day'].dt.to_period('M')
+    year_month_options = sorted(df['year_month'].unique())
+    year_month_names = [str(ym) for ym in year_month_options]
     
-    month_df = df[df['month'] == selected_month]
+    selected_year_month = st.selectbox("Select Month and Year:", year_month_names)
+    selected_period = pd.Period(selected_year_month)
+    
+    # Filter data for selected year-month
+    month_df = df[(df['day'].dt.year == selected_period.year) & (df['day'].dt.month == selected_period.month)]
     
     if not month_df.empty:
         # Monthly metrics
         col1, col2, col3 = st.columns(3)
         with col1:
             month_total = month_df['total'].sum()
-            st.metric(f"Total Rides ({selected_month_name})", f"{month_total:,}")
+            st.metric(f"Total Rides ({selected_year_month})", f"{month_total:,}")
         
         with col2:
             daily_totals_month = month_df.groupby('day')['total'].sum()
             avg_daily_month = daily_totals_month.mean()
-            st.metric(f"Avg Daily Rides ({selected_month_name})", f"{avg_daily_month:,.0f}")
+            st.metric(f"Avg Daily Rides ({selected_year_month})", f"{avg_daily_month:,.0f}")
         
         with col3:
-            st.metric(f"Days in {selected_month_name}", month_df['day'].nunique())
+            st.metric(f"Days in {selected_year_month}", month_df['day'].nunique())
         
         # Daily trend for selected month
-        st.subheader(f"📈 Daily Rides Trend - {selected_month_name}")
+        st.subheader(f"📈 Daily Rides Trend - {selected_year_month}")
         daily_rides_month = month_df.groupby('day')['total'].sum().reset_index()
         fig_daily = px.line(daily_rides_month, x='day', y='total', 
-                           title=f"Daily Rides in {selected_month_name}",
+                           title=f"Daily Rides in {selected_year_month}",
                            height=400)
         fig_daily.update_layout(
             xaxis_title="Date",
@@ -163,13 +166,13 @@ def main():
         st.plotly_chart(fig_daily, use_container_width=True)
         
         # Top locations for selected month
-        st.subheader(f"🏆 Top Locations - {selected_month_name}")
+        st.subheader(f"🏆 Top Locations - {selected_year_month}")
         top_locations_month = month_df.groupby('counter_key')['total'].sum().sort_values(ascending=False).head(10)
         fig_locations = px.bar(
             x=top_locations_month.values,
             y=top_locations_month.index,
             orientation='h',
-            title=f"Top 10 Locations in {selected_month_name}",
+            title=f"Top 10 Locations in {selected_year_month}",
             height=400
         )
         fig_locations.update_layout(
