@@ -137,10 +137,10 @@ def main():
     # Filter data for selected year-month
     month_df = df[(df['day'].dt.year == selected_period.year) & (df['day'].dt.month == selected_period.month)]
     
-if not month_df.empty:
-    # Monthly metrics
-    col1, col2, col3 = st.columns(3)
-    with col1:
+    if not month_df.empty:
+        # Monthly metrics
+        col1, col2, col3 = st.columns(3)
+        with col1:
             month_total = month_df['total'].sum()
             st.metric(f"Total Rides ({selected_year_month})", f"{month_total:,}")
         
