@@ -27,7 +27,15 @@ def get_data():
         'Frederiksberg Allé', 'Gammel Kongevej', 'Blegdamsvej', 'Roskildevej', 'Jagtvej',
         'Nørre Farimagsgade', 'Vester Farimagsgade', 'Strandboulevarden', 'Esplanaden',
         'Kongens Nytorv', 'Rådhuspladsen', 'H.C. Andersens Boulevard', 'Vester Voldgade',
-        'Nørre Voldgade', 'Øster Voldgade'
+        'Nørre Voldgade', 'Øster Voldgade', 'Strandvejen', 'Hellerupvej', 'Lyngbyvej',
+        'Frederikssundsvej', 'Hillerødgade', 'Tagensvej', 'Nørre Allé', 'Vester Allé',
+        'Øster Allé', 'Nørre Søgade', 'Vester Søgade', 'Øster Søgade', 'Amaliegade',
+        'Bredgade', 'Kongens Nytorv', 'Gammel Strand', 'Nyhavn', 'Kongens Have',
+        'Rosenborg Slot', 'Botanisk Have', 'Ørstedsparken', 'Fælledparken', 'Kongens Have',
+        'Tivoli', 'Rådhuspladsen', 'Strøget', 'Nørreport', 'Vesterport', 'Østerport',
+        'Nørrebro Station', 'Vesterbro Station', 'Østerbro Station', 'Amager Station',
+        'Frederiksberg Station', 'Valby Station', 'Vanløse Station', 'Brønshøj Station',
+        'Bispebjerg Station', 'Nørrebro Station', 'Vesterbro Station', 'Østerbro Station'
     ]
     
     data = []
@@ -156,7 +164,7 @@ def main():
             x=top_locations_month.values,
             y=top_locations_month.index,
             orientation='h',
-            title=f"Top Locations in {selected_year_month}",
+            title=f"Top 10 Locations in {selected_year_month}",
             height=400
         )
         fig_locations.update_layout(
@@ -256,7 +264,7 @@ def main():
             x=top_locations_month.values,
             y=top_locations_month.index,
             orientation='h',
-            title=f"Top Cycling Locations - {selected_year_month}",
+            title=f"Top 20 Cycling Locations - {selected_year_month}",
             height=600
         )
         fig_top.update_layout(
