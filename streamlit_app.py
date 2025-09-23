@@ -95,36 +95,36 @@ def get_data():
     return pd.DataFrame(data)
 
 def main():
-    st.title("🚴‍♂️ Copenhagen Bike Analytics")
+st.title("🚴‍♂️ Copenhagen Bike Analytics")
     st.markdown("**Real Copenhagen Cycling Data Analysis (2005-2014)**")
-    
-    # Load data
+
+# Load data
     with st.spinner("Loading Copenhagen cycling data..."):
-        df = get_data()
-    
+    df = get_data()
+
     # Overview metrics
     st.header("📊 Overview")
-    col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3, col4 = st.columns(4)
     
-    with col1:
+with col1:
         total_rides = df['total'].sum()
         st.metric("Total Rides", f"{total_rides:,}")
     
-    with col2:
+with col2:
         st.metric("Date Range", f"{df['day'].min().strftime('%Y-%m-%d')} to {df['day'].max().strftime('%Y-%m-%d')}")
     
-    with col3:
+with col3:
         st.metric("Locations", df['counter_key'].nunique())
     
-    with col4:
+with col4:
         daily_totals = df.groupby('day')['total'].sum()
         avg_daily = daily_totals.mean()
-        st.metric("Avg Daily Rides", f"{avg_daily:,.0f}")
-    
+    st.metric("Avg Daily Rides", f"{avg_daily:,.0f}")
+
     st.markdown("---")
     
     # Monthly analysis with dropdown
-    st.header("📅 Monthly Analysis")
+st.header("📅 Monthly Analysis")
     
     # Create year-month combinations
     df['year_month'] = df['day'].dt.to_period('M')
@@ -137,10 +137,10 @@ def main():
     # Filter data for selected year-month
     month_df = df[(df['day'].dt.year == selected_period.year) & (df['day'].dt.month == selected_period.month)]
     
-    if not month_df.empty:
-        # Monthly metrics
-        col1, col2, col3 = st.columns(3)
-        with col1:
+if not month_df.empty:
+    # Monthly metrics
+    col1, col2, col3 = st.columns(3)
+    with col1:
             month_total = month_df['total'].sum()
             st.metric(f"Total Rides ({selected_year_month})", f"{month_total:,}")
         
@@ -161,65 +161,61 @@ def main():
         if len(daily_rides_month) == 0 or len(daily_temp_month) == 0:
             st.warning("No data available for the selected month.")
         else:
-            # Create figure with secondary y-axis
-            fig_daily = go.Figure()
-            
-            # Add rides line (left axis)
-            fig_daily.add_trace(go.Scatter(
-                x=daily_rides_month['day'],
-                y=daily_rides_month['total'],
-                mode='lines+markers',
-                name='Daily Rides',
-                line=dict(color='#1f77b4', width=3),
-                yaxis='y'
-            ))
-            
-            # Add temperature line (right axis)
-            fig_daily.add_trace(go.Scatter(
-                x=daily_temp_month['day'],
-                y=daily_temp_month['temperature'],
-                mode='lines+markers',
-                name='Temperature (°C)',
-                line=dict(color='#ff7f0e', width=3),
-                yaxis='y2'
-            ))
-            
-            # Update layout with dual y-axes
-            fig_daily.update_layout(
-                title=f"Daily Rides vs Temperature - {selected_year_month}",
-                xaxis_title="Date",
-                yaxis=dict(
-                    title="Total Rides",
-                    titlefont=dict(color='#1f77b4'),
-                    tickfont=dict(color='#1f77b4'),
-                    side='left'
-                ),
-                yaxis2=dict(
-                    title="Temperature (°C)",
-                    titlefont=dict(color='#ff7f0e'),
-                    tickfont=dict(color='#ff7f0e'),
-                    overlaying='y',
-                    side='right'
-                ),
-                height=500,
-                showlegend=True,
-                legend=dict(
-                    orientation="h",
-                    yanchor="bottom",
-                    y=1.02,
-                    xanchor="right",
-                    x=1
-                )
-            )
-            
-            st.plotly_chart(fig_daily, use_container_width=True)
-            
-            # Add correlation info
-            correlation = daily_rides_month['total'].corr(daily_temp_month['temperature'])
-            if pd.isna(correlation):
-                st.info("📊 **Temperature-Rides Correlation**: Not enough data to calculate correlation")
-            else:
-                st.info(f"📊 **Temperature-Rides Correlation**: {correlation:.3f} (Values closer to 1.0 indicate stronger positive correlation)")
+            # Create a simple chart first
+            try:
+                # Create basic line chart for rides
+                fig_daily = px.line(daily_rides_month, x='day', y='total', 
+                                   title=f"Daily Rides - {selected_year_month}",
+                                   labels={'total': 'Total Rides', 'day': 'Date'})
+                fig_daily.update_layout(height=400)
+                
+                # Try to add temperature line
+                try:
+                    # Add temperature as secondary y-axis
+                    fig_daily.add_trace(go.Scatter(
+                        x=daily_temp_month['day'],
+                        y=daily_temp_month['temperature'],
+                        mode='lines+markers',
+                        name='Temperature (°C)',
+                        line=dict(color='#ff7f0e', width=2),
+                        yaxis='y2'
+                    ))
+                    
+                    # Update layout with secondary y-axis
+                    fig_daily.update_layout(
+                        yaxis2=dict(
+                            title="Temperature (°C)",
+                            overlaying='y',
+                            side='right',
+                            titlefont=dict(color='#ff7f0e'),
+                            tickfont=dict(color='#ff7f0e')
+                        ),
+                        legend=dict(
+                            orientation="h",
+                            yanchor="bottom",
+                            y=1.02,
+                            xanchor="right",
+                            x=1
+                        )
+                    )
+                except Exception as e:
+                    st.warning(f"Could not add temperature line: {str(e)}")
+                
+                st.plotly_chart(fig_daily, use_container_width=True)
+                
+                # Add correlation info
+                try:
+                    correlation = daily_rides_month['total'].corr(daily_temp_month['temperature'])
+                    if pd.isna(correlation):
+                        st.info("📊 **Temperature-Rides Correlation**: Not enough data to calculate correlation")
+                    else:
+                        st.info(f"📊 **Temperature-Rides Correlation**: {correlation:.3f} (Values closer to 1.0 indicate stronger positive correlation)")
+                except Exception as e:
+                    st.warning(f"Could not calculate correlation: {str(e)}")
+                    
+            except Exception as e:
+                st.error(f"Error creating chart: {str(e)}")
+                st.warning("Unable to display chart for this month.")
         
         # Top locations for selected month
         st.subheader(f"🏆 Top Locations - {selected_year_month}")
@@ -378,8 +374,8 @@ def main():
     # Data table
     st.header("📋 Data Sample")
     st.dataframe(df.head(100))
-    
-    st.markdown("---")
+
+st.markdown("---")
     st.success("✅ **Copenhagen Bike Analytics Dashboard** - Complete analysis of 10 years of cycling data")
 
 if __name__ == "__main__":
