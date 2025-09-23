@@ -157,62 +157,69 @@ def main():
         daily_rides_month = month_df.groupby('day')['total'].sum().reset_index()
         daily_temp_month = month_df.groupby('day')['temperature'].mean().reset_index()
         
-        # Create figure with secondary y-axis
-        fig_daily = go.Figure()
-        
-        # Add rides line (left axis)
-        fig_daily.add_trace(go.Scatter(
-            x=daily_rides_month['day'],
-            y=daily_rides_month['total'],
-            mode='lines+markers',
-            name='Daily Rides',
-            line=dict(color='#1f77b4', width=3),
-            yaxis='y'
-        ))
-        
-        # Add temperature line (right axis)
-        fig_daily.add_trace(go.Scatter(
-            x=daily_temp_month['day'],
-            y=daily_temp_month['temperature'],
-            mode='lines+markers',
-            name='Temperature (°C)',
-            line=dict(color='#ff7f0e', width=3),
-            yaxis='y2'
-        ))
-        
-        # Update layout with dual y-axes
-        fig_daily.update_layout(
-            title=f"Daily Rides vs Temperature - {selected_year_month}",
-            xaxis_title="Date",
-            yaxis=dict(
-                title="Total Rides",
-                titlefont=dict(color='#1f77b4'),
-                tickfont=dict(color='#1f77b4'),
-                side='left'
-            ),
-            yaxis2=dict(
-                title="Temperature (°C)",
-                titlefont=dict(color='#ff7f0e'),
-                tickfont=dict(color='#ff7f0e'),
-                overlaying='y',
-                side='right'
-            ),
-            height=500,
-            showlegend=True,
-            legend=dict(
-                orientation="h",
-                yanchor="bottom",
-                y=1.02,
-                xanchor="right",
-                x=1
+        # Check if we have data
+        if len(daily_rides_month) == 0 or len(daily_temp_month) == 0:
+            st.warning("No data available for the selected month.")
+        else:
+            # Create figure with secondary y-axis
+            fig_daily = go.Figure()
+            
+            # Add rides line (left axis)
+            fig_daily.add_trace(go.Scatter(
+                x=daily_rides_month['day'],
+                y=daily_rides_month['total'],
+                mode='lines+markers',
+                name='Daily Rides',
+                line=dict(color='#1f77b4', width=3),
+                yaxis='y'
+            ))
+            
+            # Add temperature line (right axis)
+            fig_daily.add_trace(go.Scatter(
+                x=daily_temp_month['day'],
+                y=daily_temp_month['temperature'],
+                mode='lines+markers',
+                name='Temperature (°C)',
+                line=dict(color='#ff7f0e', width=3),
+                yaxis='y2'
+            ))
+            
+            # Update layout with dual y-axes
+            fig_daily.update_layout(
+                title=f"Daily Rides vs Temperature - {selected_year_month}",
+                xaxis_title="Date",
+                yaxis=dict(
+                    title="Total Rides",
+                    titlefont=dict(color='#1f77b4'),
+                    tickfont=dict(color='#1f77b4'),
+                    side='left'
+                ),
+                yaxis2=dict(
+                    title="Temperature (°C)",
+                    titlefont=dict(color='#ff7f0e'),
+                    tickfont=dict(color='#ff7f0e'),
+                    overlaying='y',
+                    side='right'
+                ),
+                height=500,
+                showlegend=True,
+                legend=dict(
+                    orientation="h",
+                    yanchor="bottom",
+                    y=1.02,
+                    xanchor="right",
+                    x=1
+                )
             )
-        )
-        
-        st.plotly_chart(fig_daily, use_container_width=True)
-        
-        # Add correlation info
-        correlation = daily_rides_month['total'].corr(daily_temp_month['temperature'])
-        st.info(f"📊 **Temperature-Rides Correlation**: {correlation:.3f} (Values closer to 1.0 indicate stronger positive correlation)")
+            
+            st.plotly_chart(fig_daily, use_container_width=True)
+            
+            # Add correlation info
+            correlation = daily_rides_month['total'].corr(daily_temp_month['temperature'])
+            if pd.isna(correlation):
+                st.info("📊 **Temperature-Rides Correlation**: Not enough data to calculate correlation")
+            else:
+                st.info(f"📊 **Temperature-Rides Correlation**: {correlation:.3f} (Values closer to 1.0 indicate stronger positive correlation)")
         
         # Top locations for selected month
         st.subheader(f"🏆 Top Locations - {selected_year_month}")
