@@ -160,19 +160,43 @@ def main():
         # Top locations for selected month
         st.subheader(f"🏆 Top Locations - {selected_year_month}")
         top_locations_month = month_df.groupby('counter_key')['total'].sum().sort_values(ascending=False).head(10)
-        fig_locations = px.bar(
-            x=top_locations_month.values,
-            y=top_locations_month.index,
-            orientation='h',
-            title=f"Top 10 Locations in {selected_year_month}",
-            height=400
-        )
-        fig_locations.update_layout(
-            xaxis_title="Total Rides",
-            yaxis_title="Location",
-            yaxis={'categoryorder':'total ascending'}
-        )
-        st.plotly_chart(fig_locations, use_container_width=True)
+        
+        # Create chart and table side by side
+        col1, col2 = st.columns([2, 1])
+        
+        with col1:
+            fig_locations = px.bar(
+                x=top_locations_month.values,
+                y=top_locations_month.index,
+                orientation='h',
+                title=f"Top 10 Locations in {selected_year_month}",
+                height=400
+            )
+            fig_locations.update_layout(
+                xaxis_title="Total Rides",
+                yaxis_title="Location",
+                yaxis={'categoryorder':'total ascending'}
+            )
+            st.plotly_chart(fig_locations, use_container_width=True)
+        
+        with col2:
+            st.subheader("📊 Monthly Statistics")
+            # Calculate statistics for top locations
+            monthly_stats = []
+            for location in top_locations_month.index:
+                location_data = month_df[month_df['counter_key'] == location]
+                daily_rides = location_data.groupby('day')['total'].sum()
+                monthly_stats.append({
+                    'Location': location,
+                    'Total Rides': int(top_locations_month[location]),
+                    'Avg Daily': int(daily_rides.mean()),
+                    'Days Active': len(daily_rides),
+                    'Max Daily': int(daily_rides.max()),
+                    'Min Daily': int(daily_rides.min())
+                })
+            
+            stats_df = pd.DataFrame(monthly_stats)
+            st.dataframe(stats_df, use_container_width=True)
     
     st.markdown("---")
     
@@ -260,19 +284,42 @@ def main():
     st.header("🏆 Top Cycling Locations (2005-2014 - All 10 Years)")
     top_locations_overall = df.groupby('counter_key')['total'].sum().sort_values(ascending=False).head(20)
     
-    fig_overall = px.bar(
-        x=top_locations_overall.values,
-        y=top_locations_overall.index,
-        orientation='h',
-        title="Top 20 Cycling Locations (2005-2014)",
-        height=600
-    )
-    fig_overall.update_layout(
-        xaxis_title="Total Rides (10 Years)",
-        yaxis_title="Location",
-        yaxis={'categoryorder':'total ascending'}
-    )
-    st.plotly_chart(fig_overall, use_container_width=True)
+    # Create chart and table side by side
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        fig_overall = px.bar(
+            x=top_locations_overall.values,
+            y=top_locations_overall.index,
+            orientation='h',
+            title="Top 20 Cycling Locations (2005-2014)",
+            height=600
+        )
+        fig_overall.update_layout(
+            xaxis_title="Total Rides (10 Years)",
+            yaxis_title="Location",
+            yaxis={'categoryorder':'total ascending'}
+        )
+        st.plotly_chart(fig_overall, use_container_width=True)
+    
+    with col2:
+        st.subheader("📊 10-Year Statistics")
+        # Calculate statistics for top locations
+        overall_stats = []
+        for location in top_locations_overall.index:
+            location_data = df[df['counter_key'] == location]
+            daily_rides = location_data.groupby('day')['total'].sum()
+            overall_stats.append({
+                'Location': location,
+                'Total Rides': int(top_locations_overall[location]),
+                'Avg Daily': int(daily_rides.mean()),
+                'Days Active': len(daily_rides),
+                'Max Daily': int(daily_rides.max()),
+                'Min Daily': int(daily_rides.min())
+            })
+        
+        stats_df = pd.DataFrame(overall_stats)
+        st.dataframe(stats_df, use_container_width=True)
     
     # Data table
     st.header("📋 Data Sample")
