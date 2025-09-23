@@ -255,27 +255,6 @@ def main():
         )
         st.plotly_chart(fig_precip, use_container_width=True)
     
-    # Top locations for selected month
-    if not month_df.empty:
-        st.header(f"🏆 Top Cycling Locations - {selected_year_month}")
-        top_locations_month = month_df.groupby('counter_key')['total'].sum().sort_values(ascending=False).head(10)
-        
-        fig_top = px.bar(
-            x=top_locations_month.values,
-            y=top_locations_month.index,
-            orientation='h',
-            title=f"Top 10 Cycling Locations - {selected_year_month}",
-            height=600
-        )
-        fig_top.update_layout(
-            xaxis_title=f"Total Rides ({selected_year_month})",
-            yaxis_title="Location",
-            yaxis={'categoryorder':'total ascending'}
-        )
-        st.plotly_chart(fig_top, use_container_width=True)
-    else:
-        st.header("🏆 Top Cycling Locations")
-        st.info("Please select a month to view top cycling locations for that period.")
     
     # Overall top locations (10 years) - at bottom of page
     st.header("🏆 Top Cycling Locations (2005-2014 - All 10 Years)")
