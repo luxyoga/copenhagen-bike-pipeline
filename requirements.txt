@@ -1,8 +1,19 @@
+# Core Data Processing
 pyspark==3.5.1
-pandas
-pyarrow
-duckdb
-streamlit
+pandas>=2.0.0
+pyarrow>=10.0.0
+numpy>=1.24.0
+
+# Web Framework & Visualization
+streamlit>=1.28.0
+plotly>=5.15.0
+
+# Workflow Orchestration
 apache-airflow==2.9.3
-requests
-python-dotenv
+
+# Data Sources & APIs
+requests>=2.31.0
+kagglehub>=0.2.0
+
+# Utilities
+python-dotenv>=1.0.0

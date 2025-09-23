@@ -1,23 +1,80 @@
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
 .venv/
+venv/
+ENV/
+env/
 .env
 
-# Data
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Data files (keep structure but not large files)
+data/raw/*.csv
+data/curated/*.csv
 data/bronze/
 data/silver/
 data/gold/
-*.csv
-*.json
-*.parquet
+data/_scratch/
 
-# Airflow local
-airflow/
+# Logs
 logs/
+*.log
 
-# OS/Editor
-.DS_Store
+# Airflow
+airflow.cfg
+airflow.db
+unittests.cfg
+webserver_config.py
+
+# Docker
+.dockerignore
+
+# Jupyter
 .ipynb_checkpoints/
-.vscode/
-.envrc
+*.ipynb
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Cache
+.cache/
+.pytest_cache/
