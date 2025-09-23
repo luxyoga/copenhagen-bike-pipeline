@@ -280,65 +280,6 @@ def main():
         st.plotly_chart(fig_precip, use_container_width=True)
     
     
-    # Interactive Location Analysis
-    st.header("🔍 Interactive Location Analysis")
-    
-    # Get all available locations
-    all_locations = sorted(df['counter_key'].unique())
-    
-    # Location selector
-    selected_locations = st.multiselect(
-        "Select locations to analyze:",
-        all_locations,
-        default=all_locations[:5],  # Default to first 5 locations
-        key="location_selector"
-    )
-    
-    if selected_locations:
-        # Filter data for selected locations
-        filtered_df = df[df['counter_key'].isin(selected_locations)]
-        
-        # Daily rides comparison
-        st.subheader("📈 Daily Rides Comparison")
-        daily_comparison = filtered_df.groupby(['day', 'counter_key'])['total'].sum().reset_index()
-        
-        fig_comparison = px.line(
-            daily_comparison, 
-            x='day', 
-            y='total', 
-            color='counter_key',
-            title="Daily Bike Rides Over Time",
-            height=500
-        )
-        fig_comparison.update_layout(
-            xaxis_title="Date",
-            yaxis_title="Daily Rides",
-            legend_title="Location"
-        )
-        st.plotly_chart(fig_comparison, use_container_width=True)
-        
-        # Summary statistics table
-        st.subheader("📊 Summary Statistics")
-        summary_stats = []
-        for location in selected_locations:
-            location_data = filtered_df[filtered_df['counter_key'] == location]
-            daily_rides = location_data.groupby('day')['total'].sum()
-            summary_stats.append({
-                'counter_key': location,
-                'Days': len(daily_rides),
-                'Total': int(daily_rides.sum()),
-                'Avg Daily': int(daily_rides.mean()),
-                'Min': int(daily_rides.min()),
-                'Max': int(daily_rides.max())
-            })
-        
-        summary_df = pd.DataFrame(summary_stats)
-        st.dataframe(summary_df, use_container_width=True)
-    else:
-        st.info("Please select at least one location to analyze.")
-    
-    st.markdown("---")
-    
     # Overall top locations (10 years) - at bottom of page
     st.header("🏆 Top Cycling Locations (2005-2014 - All 10 Years)")
     top_locations_overall = df.groupby('counter_key')['total'].sum().sort_values(ascending=False).head(20)
