@@ -95,36 +95,36 @@ def get_data():
     return pd.DataFrame(data)
 
 def main():
-st.title("🚴‍♂️ Copenhagen Bike Analytics")
+    st.title("🚴‍♂️ Copenhagen Bike Analytics")
     st.markdown("**Real Copenhagen Cycling Data Analysis (2005-2014)**")
-
-# Load data
+    
+    # Load data
     with st.spinner("Loading Copenhagen cycling data..."):
-    df = get_data()
-
+        df = get_data()
+    
     # Overview metrics
     st.header("📊 Overview")
-col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3, col4 = st.columns(4)
     
-with col1:
+    with col1:
         total_rides = df['total'].sum()
         st.metric("Total Rides", f"{total_rides:,}")
     
-with col2:
+    with col2:
         st.metric("Date Range", f"{df['day'].min().strftime('%Y-%m-%d')} to {df['day'].max().strftime('%Y-%m-%d')}")
     
-with col3:
+    with col3:
         st.metric("Locations", df['counter_key'].nunique())
     
-with col4:
+    with col4:
         daily_totals = df.groupby('day')['total'].sum()
         avg_daily = daily_totals.mean()
-    st.metric("Avg Daily Rides", f"{avg_daily:,.0f}")
+        st.metric("Avg Daily Rides", f"{avg_daily:,.0f}")
 
     st.markdown("---")
     
     # Monthly analysis with dropdown
-st.header("📅 Monthly Analysis")
+    st.header("📅 Monthly Analysis")
     
     # Create year-month combinations
     df['year_month'] = df['day'].dt.to_period('M')
@@ -374,8 +374,8 @@ if not month_df.empty:
     # Data table
     st.header("📋 Data Sample")
     st.dataframe(df.head(100))
-
-st.markdown("---")
+    
+    st.markdown("---")
     st.success("✅ **Copenhagen Bike Analytics Dashboard** - Complete analysis of 10 years of cycling data")
 
 if __name__ == "__main__":
