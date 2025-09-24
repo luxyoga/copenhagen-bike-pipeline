@@ -93,7 +93,7 @@ def main():
     </style>
     """, unsafe_allow_html=True)
     
-    st.title("🚴‍♂️ Copenhagen Bike Analytics")
+    st.title("Copenhagen Bike Analytics")
     st.markdown("**Real Copenhagen Cycling Data Analysis (2005-2014)**")
 
     # Load data
@@ -101,7 +101,7 @@ def main():
         df = get_data()
 
     # Overview metrics
-    st.header("📊 Overview")
+    st.header("Overview")
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
@@ -122,7 +122,7 @@ def main():
     st.markdown("---")
 
     # Monthly analysis
-    st.header("📅 Monthly Analysis")
+    st.header("Monthly Analysis")
     
     # Create year-month combinations
     df['year_month'] = df['day'].dt.to_period('M')
@@ -137,7 +137,7 @@ def main():
     
     if not month_df.empty:
         # Monthly metrics
-        st.subheader(f"📈 Monthly Metrics - {selected_year_month}")
+        st.subheader(f"Monthly Metrics - {selected_year_month}")
         monthly_col1, monthly_col2, monthly_col3, monthly_col4 = st.columns(4)
         
         with monthly_col1:
@@ -158,7 +158,7 @@ def main():
             st.metric("Peak Daily", f"{peak_daily:,}")
         
         # Top locations for selected month
-        st.header(f"🏆 Top Cycling Locations - {selected_year_month}")
+        st.header(f"Top Cycling Locations - {selected_year_month}")
         top_locations_month = month_df.groupby('counter_key')['total'].sum().sort_values(ascending=False).head(10)
         
         # Create chart and table side by side
@@ -183,7 +183,7 @@ def main():
             st.plotly_chart(fig_top, use_container_width=True)
         
         with col2:
-            st.subheader("📊 Monthly Statistics")
+            st.subheader("Monthly Statistics")
             # Calculate statistics for top locations
             monthly_stats = []
             for location in top_locations_month.index:
@@ -200,13 +200,13 @@ def main():
             stats_df = pd.DataFrame(monthly_stats)
             st.dataframe(stats_df, use_container_width=True)
     else:
-        st.header("🏆 Top Cycling Locations")
+        st.header("Top Cycling Locations")
         st.info("Please select a month to view top cycling locations for that period.")
 
     st.markdown("---")
 
     # Seasonal Analysis
-    st.header("🌱 Seasonal Analysis (2005-2014 - All 10 Years)")
+    st.header("Seasonal Analysis (2005-2014 - All 10 Years)")
     seasonal_summary = df.groupby('season').agg({
         'total': 'sum',
         'day': 'nunique'
@@ -252,7 +252,7 @@ def main():
     st.markdown("---")
 
     # Weather Impact Analysis
-    st.header("🌤️ Weather Impact Analysis (2005-2014 - All 10 Years)")
+    st.header("Weather Impact Analysis (2005-2014 - All 10 Years)")
     
     # Temperature analysis
     df['temp_bin'] = pd.cut(df['temperature'], bins=[-10, 0, 10, 20, 30], labels=['Cold (0-5°C)', 'Cool (5-15°C)', 'Warm (15-25°C)', 'Hot (25°C+)'])
@@ -298,7 +298,7 @@ def main():
     st.plotly_chart(fig_precip, use_container_width=True)
     
     # Weather Impact Analysis
-    st.subheader("🔍 Weather Impact Analysis")
+    st.subheader("Weather Impact Analysis")
     
     # Calculate weather impact statistics
     weather_stats = df.groupby('weather_condition')['total'].agg(['mean', 'std']).round(0)
@@ -315,15 +315,15 @@ def main():
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.markdown("**🌤️ Weather Conditions**")
+        st.markdown("**Weather Conditions**")
         st.dataframe(weather_stats, use_container_width=True)
     
     with col2:
-        st.markdown("**🌡️ Temperature Ranges**")
+        st.markdown("**Temperature Ranges**")
         st.dataframe(temp_stats, use_container_width=True)
     
     with col3:
-        st.markdown("**🌧️ Precipitation Levels**")
+        st.markdown("**Precipitation Levels**")
         st.dataframe(precip_stats, use_container_width=True)
     
     # Weather impact insight
@@ -332,14 +332,14 @@ def main():
     weather_impact = ((sunny_avg - rainy_avg) / rainy_avg) * 100
     
     if weather_impact > 50:
-        st.info(f"💡 **Weather Impact Insight**: Sunny weather shows {weather_impact:.1f}% higher ridership than rainy weather, indicating weather does significantly affect cycling patterns in Copenhagen.")
+        st.info(f"**Weather Impact Insight**: Sunny weather shows {weather_impact:.1f}% higher ridership than rainy weather, indicating weather does significantly affect cycling patterns in Copenhagen.")
     else:
-        st.info(f"💡 **Weather Impact Insight**: Sunny weather shows only {weather_impact:.1f}% higher ridership than rainy weather, suggesting Copenhagen cyclists are quite resilient to weather conditions! This indicates a strong cycling culture where people bike regardless of weather.")
+        st.info(f"**Weather Impact Insight**: Sunny weather shows only {weather_impact:.1f}% higher ridership than rainy weather, suggesting Copenhagen cyclists are quite resilient to weather conditions! This indicates a strong cycling culture where people bike regardless of weather.")
 
     st.markdown("---")
 
     # Overall top locations (10 years) - at bottom of page
-    st.header("🏆 Top Cycling Locations (2005-2014 - All 10 Years)")
+    st.header("Top Cycling Locations (2005-2014 - All 10 Years)")
     top_locations_overall = df.groupby('counter_key')['total'].sum().sort_values(ascending=False).head(20)
     
     # Create chart and table side by side
@@ -364,7 +364,7 @@ def main():
         st.plotly_chart(fig_overall, use_container_width=True)
     
     with col2:
-        st.subheader("📊 10-Year Statistics")
+        st.subheader("10-Year Statistics")
         # Calculate statistics for top locations
         overall_stats = []
         for location in top_locations_overall.index:
@@ -382,7 +382,7 @@ def main():
         st.dataframe(stats_df, use_container_width=True)
     
     # Key Insights
-    st.header("💡 Key Insights")
+    st.header("Key Insights")
     
     # Calculate key insights
     total_rides = df['total'].sum()
@@ -411,25 +411,25 @@ def main():
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown(f"🏆 **Busiest Location**: {busiest_location} with {busiest_total:,} total rides")
-        st.markdown(f"📊 **Average Daily Rides**: {avg_daily:,.0f} rides per day across all locations")
-        st.markdown(f"🎯 **Most Consistent**: {most_consistent} (lowest variation in daily rides)")
-        st.markdown(f"🚴‍♂️ **Total System Usage**: {total_rides:,} bike rides across all locations")
+        st.markdown(f"**Busiest Location**: {busiest_location} with {busiest_total:,} total rides")
+        st.markdown(f"**Average Daily Rides**: {avg_daily:,.0f} rides per day across all locations")
+        st.markdown(f"**Most Consistent**: {most_consistent} (lowest variation in daily rides)")
+        st.markdown(f"**Total System Usage**: {total_rides:,} bike rides across all locations")
     
     with col2:
-        st.markdown(f"☀️ **Best Weather**: {best_weather} conditions see highest ridership")
-        st.markdown(f"🌱 **Peak Season**: {best_season} has the highest average daily rides")
-        st.markdown(f"📈 **Peak Daily Usage**: {peak_daily:,} rides on {peak_date.strftime('%B %d, %Y')}")
-        st.markdown(f"📍 **Data Coverage**: {df['counter_key'].nunique()} monitoring locations")
+        st.markdown(f"**Best Weather**: {best_weather} conditions see highest ridership")
+        st.markdown(f"**Peak Season**: {best_season} has the highest average daily rides")
+        st.markdown(f"**Peak Daily Usage**: {peak_daily:,} rides on {peak_date.strftime('%B %d, %Y')}")
+        st.markdown(f"**Data Coverage**: {df['counter_key'].nunique()} monitoring locations")
 
     st.markdown("---")
     
     # Data table
-    st.header("📋 Data Sample")
+    st.header("Data Sample")
     st.dataframe(df.head(100))
     
     st.markdown("---")
-    st.success("✅ **Copenhagen Bike Analytics Dashboard** - Complete analysis of 10 years of cycling data")
+    st.success("**Copenhagen Bike Analytics Dashboard** - Complete analysis of 10 years of cycling data")
 
 if __name__ == "__main__":
     main()
