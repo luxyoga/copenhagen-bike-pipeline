@@ -93,36 +93,36 @@ def main():
     </style>
     """, unsafe_allow_html=True)
     
-st.title("🚴‍♂️ Copenhagen Bike Analytics")
+    st.title("🚴‍♂️ Copenhagen Bike Analytics")
     st.markdown("**Real Copenhagen Cycling Data Analysis (2005-2014)**")
 
-# Load data
+    # Load data
     with st.spinner("Loading Copenhagen cycling data..."):
-    df = get_data()
+        df = get_data()
 
     # Overview metrics
     st.header("📊 Overview")
-col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3, col4 = st.columns(4)
     
-with col1:
+    with col1:
         total_rides = df['total'].sum()
         st.metric("Total Rides", f"{total_rides:,}")
     
-with col2:
+    with col2:
         st.metric("Date Range", f"{df['day'].min().strftime('%Y-%m-%d')} to {df['day'].max().strftime('%Y-%m-%d')}")
     
-with col3:
+    with col3:
         st.metric("Locations", df['counter_key'].nunique())
     
-with col4:
+    with col4:
         daily_totals = df.groupby('day')['total'].sum()
         avg_daily = daily_totals.mean()
-    st.metric("Avg Daily Rides", f"{avg_daily:,.0f}")
+        st.metric("Avg Daily Rides", f"{avg_daily:,.0f}")
 
     st.markdown("---")
 
-# Monthly analysis
-st.header("📅 Monthly Analysis")
+    # Monthly analysis
+    st.header("📅 Monthly Analysis")
     
     # Create year-month combinations
     df['year_month'] = df['day'].dt.to_period('M')
@@ -135,8 +135,8 @@ st.header("📅 Monthly Analysis")
     # Filter data for selected year-month
     month_df = df[(df['day'].dt.year == selected_period.year) & (df['day'].dt.month == selected_period.month)]
     
-if not month_df.empty:
-    # Monthly metrics
+    if not month_df.empty:
+        # Monthly metrics
         st.subheader(f"📈 Monthly Metrics - {selected_year_month}")
         monthly_col1, monthly_col2, monthly_col3, monthly_col4 = st.columns(4)
         
@@ -372,8 +372,8 @@ if not month_df.empty:
     # Data table
     st.header("📋 Data Sample")
     st.dataframe(df.head(100))
-
-st.markdown("---")
+    
+    st.markdown("---")
     st.success("✅ **Copenhagen Bike Analytics Dashboard** - Complete analysis of 10 years of cycling data")
 
 if __name__ == "__main__":
