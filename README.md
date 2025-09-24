@@ -121,8 +121,8 @@ copenhagen-bike-pipeline/
 
 ## **Looking Ahead**
 
-- Deploy pipeline to cloud (AWS/GCP/Azure)
-- Add real-time streaming with Kafka
-- Extend dashboard with forecasting models for bike traffic
+1. Deploy pipeline to cloud (AWS/GCP/Azure)
+2. Add real-time streaming with Kafka
+3. Extend dashboard with forecasting models for bike traffic
 
 ---
