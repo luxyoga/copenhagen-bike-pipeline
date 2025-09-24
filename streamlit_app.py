@@ -89,36 +89,36 @@ def get_data():
     return pd.DataFrame(data)
 
 def main():
-    st.title("🚴‍♂️ Copenhagen Bike Analytics")
+st.title("🚴‍♂️ Copenhagen Bike Analytics")
     st.markdown("**Real Copenhagen Cycling Data Analysis (2005-2014)**")
-    
-    # Load data
+
+# Load data
     with st.spinner("Loading Copenhagen cycling data..."):
-        df = get_data()
-    
+    df = get_data()
+
     # Overview metrics
     st.header("📊 Overview")
-    col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3, col4 = st.columns(4)
     
-    with col1:
+with col1:
         total_rides = df['total'].sum()
         st.metric("Total Rides", f"{total_rides:,}")
     
-    with col2:
+with col2:
         st.metric("Date Range", f"{df['day'].min().strftime('%Y-%m-%d')} to {df['day'].max().strftime('%Y-%m-%d')}")
     
-    with col3:
+with col3:
         st.metric("Locations", df['counter_key'].nunique())
     
-    with col4:
+with col4:
         daily_totals = df.groupby('day')['total'].sum()
         avg_daily = daily_totals.mean()
-        st.metric("Avg Daily Rides", f"{avg_daily:,.0f}")
+    st.metric("Avg Daily Rides", f"{avg_daily:,.0f}")
 
     st.markdown("---")
-    
-    # Monthly analysis
-    st.header("📅 Monthly Analysis")
+
+# Monthly analysis
+st.header("📅 Monthly Analysis")
     
     # Create year-month combinations
     df['year_month'] = df['day'].dt.to_period('M')
@@ -131,10 +131,10 @@ def main():
     # Filter data for selected year-month
     month_df = df[(df['day'].dt.year == selected_period.year) & (df['day'].dt.month == selected_period.month)]
     
-    if not month_df.empty:
-        # Monthly metrics
-        col1, col2, col3 = st.columns(3)
-        with col1:
+if not month_df.empty:
+    # Monthly metrics
+    col1, col2, col3 = st.columns(3)
+    with col1:
             month_total = month_df['total'].sum()
             st.metric(f"Total Rides ({selected_year_month})", f"{month_total:,}")
         
@@ -324,6 +324,49 @@ def main():
     # Data table
     st.header("📋 Data Sample")
     st.dataframe(df.head(100))
+
+st.markdown("---")
+    
+    # Key Insights
+    st.header("💡 Key Insights")
+    
+    # Calculate key insights
+    total_rides = df['total'].sum()
+    avg_daily = df.groupby('day')['total'].sum().mean()
+    busiest_location = df.groupby('counter_key')['total'].sum().idxmax()
+    busiest_total = df.groupby('counter_key')['total'].sum().max()
+    
+    # Most consistent location (lowest coefficient of variation)
+    location_stats = df.groupby('counter_key')['total'].agg(['mean', 'std']).reset_index()
+    location_stats['cv'] = location_stats['std'] / location_stats['mean']
+    most_consistent = location_stats.loc[location_stats['cv'].idxmin(), 'counter_key']
+    
+    # Weather insights
+    weather_impact = df.groupby('weather_condition')['total'].mean().sort_values(ascending=False)
+    best_weather = weather_impact.index[0]
+    
+    # Seasonal insights
+    seasonal_avg = df.groupby('season')['total'].mean().sort_values(ascending=False)
+    best_season = seasonal_avg.index[0]
+    
+    # Peak usage insights
+    peak_daily = df.groupby('day')['total'].sum().max()
+    peak_date = df.groupby('day')['total'].sum().idxmax()
+    
+    # Create insights display
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown(f"🏆 **Busiest Location**: {busiest_location} with {busiest_total:,} total rides")
+        st.markdown(f"📊 **Average Daily Rides**: {avg_daily:,.0f} rides per day across all locations")
+        st.markdown(f"🎯 **Most Consistent**: {most_consistent} (lowest variation in daily rides)")
+        st.markdown(f"🚴‍♂️ **Total System Usage**: {total_rides:,} bike rides across all locations")
+    
+    with col2:
+        st.markdown(f"☀️ **Best Weather**: {best_weather} conditions see highest ridership")
+        st.markdown(f"🌱 **Peak Season**: {best_season} has the highest average daily rides")
+        st.markdown(f"📈 **Peak Daily Usage**: {peak_daily:,} rides on {peak_date.strftime('%B %d, %Y')}")
+        st.markdown(f"📍 **Data Coverage**: {df['counter_key'].nunique()} monitoring locations")
     
     st.markdown("---")
     st.success("✅ **Copenhagen Bike Analytics Dashboard** - Complete analysis of 10 years of cycling data")
