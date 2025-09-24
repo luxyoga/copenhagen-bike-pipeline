@@ -267,7 +267,7 @@ def main():
         title="Average Rides by Temperature Range (2005-2014)",
         height=400,
         color='temp_bin',
-        color_discrete_sequence=px.colors.sequential.RdYlBu
+        color_discrete_sequence=['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4']
     )
     fig_temp.update_layout(
         xaxis_title="Temperature Range",
@@ -288,7 +288,7 @@ def main():
         title="Average Rides by Precipitation Level (2005-2014)",
         height=400,
         color='precip_bin',
-        color_discrete_sequence=px.colors.sequential.Blues
+        color_discrete_sequence=['#E3F2FD', '#BBDEFB', '#90CAF9', '#64B5F6']
     )
     fig_precip.update_layout(
         xaxis_title="Precipitation Level",
