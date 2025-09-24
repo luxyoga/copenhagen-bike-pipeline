@@ -50,13 +50,13 @@ def get_data():
             
             # Weather effects
             if np.random.random() < 0.3:  # 30% chance of rain
-                weather_multiplier = 0.6
+                weather_multiplier = 0.9
                 weather_condition = 'rainy'
             elif np.random.random() < 0.5:  # 20% chance of cloudy
-                weather_multiplier = 0.8
+                weather_multiplier = 0.95
                 weather_condition = 'cloudy'
             else:  # 50% chance of sunny
-                weather_multiplier = 1.2
+                weather_multiplier = 1.05
                 weather_condition = 'sunny'
             
             total_rides = int(base_rides * weather_multiplier)
