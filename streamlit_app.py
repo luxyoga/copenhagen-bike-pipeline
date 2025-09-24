@@ -331,7 +331,10 @@ def main():
     rainy_avg = weather_stats.loc['rainy', 'Avg Rides']
     weather_impact = ((sunny_avg - rainy_avg) / rainy_avg) * 100
     
-    st.info(f"💡 **Weather Impact Insight**: Sunny weather shows only {weather_impact:.1f}% higher ridership than rainy weather, suggesting Copenhagen cyclists are quite resilient to weather conditions! This indicates a strong cycling culture where people bike regardless of weather.")
+    if weather_impact > 50:
+        st.info(f"💡 **Weather Impact Insight**: Sunny weather shows {weather_impact:.1f}% higher ridership than rainy weather, indicating weather does significantly affect cycling patterns in Copenhagen.")
+    else:
+        st.info(f"💡 **Weather Impact Insight**: Sunny weather shows only {weather_impact:.1f}% higher ridership than rainy weather, suggesting Copenhagen cyclists are quite resilient to weather conditions! This indicates a strong cycling culture where people bike regardless of weather.")
 
     st.markdown("---")
 
