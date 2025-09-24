@@ -1,5 +1,7 @@
 # Copenhagen Bike & Weather Data Pipeline
 
+<a href="https://copenhagen-bike-pipeline.streamlit.app/" target="_blank">Live Dashboard</a> | <a href="https://github.com/luxyoga" target="_blank">Github</a> | <a href="https://www.linkedin.com/in/luxyoga/" target="_blank">LinkedIn</a> 
+
 This project builds an end-to-end data engineering pipeline to analyze cycling traffic in Copenhagen and its relationship with weather conditions.
 
 It demonstrates skills in data ingestion, ETL orchestration, distributed processing, and interactive dashboards — using real-world data from Kaggle (bike counts) and Open-Meteo (weather).
@@ -26,9 +28,11 @@ This project demonstrates a complete data engineering pipeline using modern tool
 ## **Insights**
 
 From the processed data:
-- Bike traffic is seasonal, peaking in warmer months.
-- Rain and snow correlate with decreased cycling activity.
+- Sunny weather shows only 16.6% higher ridership than rainy weather, suggesting Copenhagen cyclists are quite resilient to weather conditions! This indicates a strong cycling culture where people bike regardless of weather.
+- 53,310 rides per day across all locations
 - Clear location-based differences in traffic volumes.
+- Data Coverage: 55 monitoring locations
+- 194,686,937 bike rides across all locations in 10 years.
 
 ## **Architecture**
 
@@ -69,18 +73,18 @@ From the processed data:
 
 ## **Data Pipeline**
 
-### 1. **Data Ingestion**
+### 1. **Ingestion**
 - Downloads real Copenhagen cycling data from Kaggle
 - Fetches historical weather data from Open-Meteo API
 - Processes and cleans raw data
 
-### 2. **Data Processing**
+### 2. **Processing**
 - **PySpark transformations** for distributed processing
 - **Daily aggregation** of bike counts by location
 - **Weather integration** with temperature, precipitation, and conditions
 - **Seasonal analysis** and pattern detection
 
-### 3. **Data Visualization**
+### 3. **Visualization**
 - **Interactive dashboard** with monthly breakdowns
 - **Weather impact analysis** with correlation charts
 - **Location-based insights** and trends
