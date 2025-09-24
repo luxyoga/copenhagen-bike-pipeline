@@ -4,6 +4,14 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 
+# Page configuration for full width
+st.set_page_config(
+    page_title="Copenhagen Bike Analytics",
+    page_icon="🚴‍♂️",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
+
 def get_data():
     """Generate realistic Copenhagen bike data"""
     np.random.seed(42)
@@ -68,6 +76,20 @@ def get_data():
     return pd.DataFrame(data)
 
 def main():
+    # Custom CSS for full width
+    st.markdown("""
+    <style>
+    .main .block-container {
+        max-width: 100%;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    .stPlotlyChart {
+        width: 100% !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
     st.title("🚴‍♂️ Copenhagen Bike Analytics")
     st.markdown("**Real Copenhagen Cycling Data Analysis (2005-2014)**")
 
