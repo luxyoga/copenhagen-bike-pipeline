@@ -21,16 +21,19 @@ def get_data():
     
     # Copenhagen cycling locations
     locations = [
-        'Torvegade', 'Åboulevard', 'Frederikssundsvej', 'Jagtvej', 'Fredensbro',
-        'Amager Station', 'Amagerbrogade', 'Amaliegade', 'Bispebjerg Station', 'Blegdamsvej',
-        'Englandsvej', 'H.C. Andersens Boulevard', 'Istedgade', 'Kongens Nytorv', 'Langebro',
-        'Nørrebrogade', 'Østerbrogade', 'Rådhuspladsen', 'Strandboulevarden', 'Vesterbrogade',
-        'Blegdamsvej', 'Bispebjerg Station', 'Englandsvej', 'Frederiksberg Allé', 'Gammel Kongevej',
-        'H.C. Andersens Boulevard', 'Istedgade', 'Jagtvej', 'Kongens Nytorv', 'Langebro',
-        'Nørrebrogade', 'Østerbrogade', 'Rådhuspladsen', 'Strandboulevarden', 'Vesterbrogade',
-        'Amager Station', 'Amagerbrogade', 'Amaliegade', 'Bispebjerg Station', 'Blegdamsvej',
-        'Englandsvej', 'Frederiksberg Allé', 'Gammel Kongevej', 'H.C. Andersens Boulevard', 'Istedgade',
-        'Jagtvej', 'Kongens Nytorv', 'Langebro', 'Nørrebrogade', 'Østerbrogade'
+        'Nørrebrogade', 'Amagerbrogade', 'Englandsvej', 'Vesterbrogade', 'Østerbrogade',
+        'Frederiksberg Allé', 'Gammel Kongevej', 'Blegdamsvej', 'Roskildevej', 'Jagtvej',
+        'Nørre Farimagsgade', 'Vester Farimagsgade', 'Strandboulevarden', 'Esplanaden',
+        'Kongens Nytorv', 'Rådhuspladsen', 'H.C. Andersens Boulevard', 'Vester Voldgade',
+        'Nørre Voldgade', 'Øster Voldgade', 'Strandvejen', 'Hellerupvej', 'Lyngbyvej',
+        'Frederikssundsvej', 'Hillerødgade', 'Tagensvej', 'Nørre Allé', 'Vester Allé',
+        'Øster Allé', 'Nørre Søgade', 'Vester Søgade', 'Øster Søgade', 'Amaliegade',
+        'Bredgade', 'Kongens Nytorv', 'Gammel Strand', 'Nyhavn', 'Kongens Have',
+        'Rosenborg Slot', 'Botanisk Have', 'Ørstedsparken', 'Fælledparken', 'Kongens Have',
+        'Tivoli', 'Rådhuspladsen', 'Strøget', 'Nørreport', 'Vesterport', 'Østerport',
+        'Nørrebro Station', 'Vesterbro Station', 'Østerbro Station', 'Amager Station',
+        'Frederiksberg Station', 'Valby Station', 'Vanløse Station', 'Brønshøj Station',
+        'Bispebjerg Station', 'Nørrebro Station', 'Vesterbro Station', 'Østerbro Station'
     ]
     
     data = []
@@ -90,36 +93,36 @@ def main():
     </style>
     """, unsafe_allow_html=True)
     
-    st.title("🚴‍♂️ Copenhagen Bike Analytics")
+st.title("🚴‍♂️ Copenhagen Bike Analytics")
     st.markdown("**Real Copenhagen Cycling Data Analysis (2005-2014)**")
 
-    # Load data
+# Load data
     with st.spinner("Loading Copenhagen cycling data..."):
-        df = get_data()
+    df = get_data()
 
     # Overview metrics
     st.header("📊 Overview")
-    col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3, col4 = st.columns(4)
     
-    with col1:
+with col1:
         total_rides = df['total'].sum()
         st.metric("Total Rides", f"{total_rides:,}")
     
-    with col2:
+with col2:
         st.metric("Date Range", f"{df['day'].min().strftime('%Y-%m-%d')} to {df['day'].max().strftime('%Y-%m-%d')}")
     
-    with col3:
+with col3:
         st.metric("Locations", df['counter_key'].nunique())
     
-    with col4:
+with col4:
         daily_totals = df.groupby('day')['total'].sum()
         avg_daily = daily_totals.mean()
-        st.metric("Avg Daily Rides", f"{avg_daily:,.0f}")
+    st.metric("Avg Daily Rides", f"{avg_daily:,.0f}")
 
     st.markdown("---")
 
-    # Monthly analysis
-    st.header("📅 Monthly Analysis")
+# Monthly analysis
+st.header("📅 Monthly Analysis")
     
     # Create year-month combinations
     df['year_month'] = df['day'].dt.to_period('M')
@@ -132,8 +135,8 @@ def main():
     # Filter data for selected year-month
     month_df = df[(df['day'].dt.year == selected_period.year) & (df['day'].dt.month == selected_period.month)]
     
-    if not month_df.empty:
-        # Monthly metrics
+if not month_df.empty:
+    # Monthly metrics
         st.subheader(f"📈 Monthly Metrics - {selected_year_month}")
         monthly_col1, monthly_col2, monthly_col3, monthly_col4 = st.columns(4)
         
@@ -323,12 +326,6 @@ def main():
         stats_df = pd.DataFrame(overall_stats)
         st.dataframe(stats_df, use_container_width=True)
     
-    # Data table
-    st.header("📋 Data Sample")
-    st.dataframe(df.head(100))
-    
-    st.markdown("---")
-    
     # Key Insights
     st.header("💡 Key Insights")
     
@@ -369,8 +366,14 @@ def main():
         st.markdown(f"🌱 **Peak Season**: {best_season} has the highest average daily rides")
         st.markdown(f"📈 **Peak Daily Usage**: {peak_daily:,} rides on {peak_date.strftime('%B %d, %Y')}")
         st.markdown(f"📍 **Data Coverage**: {df['counter_key'].nunique()} monitoring locations")
-    
+
     st.markdown("---")
+    
+    # Data table
+    st.header("📋 Data Sample")
+    st.dataframe(df.head(100))
+
+st.markdown("---")
     st.success("✅ **Copenhagen Bike Analytics Dashboard** - Complete analysis of 10 years of cycling data")
 
 if __name__ == "__main__":
