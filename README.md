@@ -1,4 +1,4 @@
-# 🚴‍♂️ Copenhagen Bike & Weather Data Pipeline
+# Copenhagen Bike & Weather Data Pipeline
 
 This project builds an end-to-end data engineering pipeline to analyze cycling traffic in Copenhagen and its relationship with weather conditions.
 
@@ -26,11 +26,11 @@ This project demonstrates a complete data engineering pipeline using modern tool
 ## **Insights**
 
 From the processed data:
-	•	Bike traffic is seasonal, peaking in warmer months.
-	•	Rain and snow correlate with decreased cycling activity.
-	•	Clear location-based differences in traffic volumes.
+- Bike traffic is seasonal, peaking in warmer months.
+- Rain and snow correlate with decreased cycling activity.
+- Clear location-based differences in traffic volumes.
 
-## 🏗️ **Architecture**
+## **Architecture**
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
@@ -51,15 +51,9 @@ From the processed data:
 
 ## **Quick Start**
 
-### Prerequisites
-- Docker & Docker Compose
-- Git
-
-### Installation
-
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone <https://github.com/luxyoga/copenhagen-bike-pipeline>
    cd copenhagen-bike-pipeline
    ```
 
@@ -127,14 +121,8 @@ copenhagen-bike-pipeline/
 
 ## **Looking Ahead**
 
-- Deploy pipeline to cloud (AWS/GCP/Azure)
-- Add real-time streaming with Kafka
-- Extend dashboard with forecasting models for bike traffic
-
-## **Acknowledgments**
-
-- **Copenhagen Municipality** for open data initiatives
-- **Kaggle** for hosting the cycling dataset
-- **Open-Meteo** for historical weather data
+1. Deploy pipeline to cloud (AWS/GCP/Azure)
+2. Add real-time streaming with Kafka
+3. Extend dashboard with forecasting models for bike traffic
 
 ---
