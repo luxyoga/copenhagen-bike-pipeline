@@ -1,5 +1,7 @@
 # Copenhagen Bike & Weather Data Pipeline
 
+[View Live Dashboard](https://copenhagen-bike-pipeline.streamlit.app/) | [Github Repo](https://github.com/luxyoga) | [LinkedIn](https://www.linkedin.com/in/luxyoga/) 
+
 This project builds an end-to-end data engineering pipeline to analyze cycling traffic in Copenhagen and its relationship with weather conditions.
 
 It demonstrates skills in data ingestion, ETL orchestration, distributed processing, and interactive dashboards — using real-world data from Kaggle (bike counts) and Open-Meteo (weather).
