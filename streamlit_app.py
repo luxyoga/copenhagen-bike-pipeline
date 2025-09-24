@@ -193,7 +193,6 @@ def main():
                     'Location': location,
                     'Total Rides': int(top_locations_month[location]),
                     'Avg Daily': int(daily_rides.mean()),
-                    'Days Active': len(daily_rides),
                     'Max Daily': int(daily_rides.max()),
                     'Min Daily': int(daily_rides.min())
                 })
@@ -297,6 +296,42 @@ def main():
         showlegend=False
     )
     st.plotly_chart(fig_precip, use_container_width=True)
+    
+    # Weather Impact Analysis
+    st.subheader("🔍 Weather Impact Analysis")
+    
+    # Calculate weather impact statistics
+    weather_stats = df.groupby('weather_condition')['total'].agg(['mean', 'std']).round(0)
+    weather_stats.columns = ['Avg Rides', 'Std Dev']
+    
+    # Calculate temperature impact
+    temp_stats = df.groupby('temp_bin')['total'].agg(['mean', 'std']).round(0)
+    temp_stats.columns = ['Avg Rides', 'Std Dev']
+    
+    # Calculate precipitation impact
+    precip_stats = df.groupby('precip_bin')['total'].agg(['mean', 'std']).round(0)
+    precip_stats.columns = ['Avg Rides', 'Std Dev']
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("**🌤️ Weather Conditions**")
+        st.dataframe(weather_stats, use_container_width=True)
+    
+    with col2:
+        st.markdown("**🌡️ Temperature Ranges**")
+        st.dataframe(temp_stats, use_container_width=True)
+    
+    with col3:
+        st.markdown("**🌧️ Precipitation Levels**")
+        st.dataframe(precip_stats, use_container_width=True)
+    
+    # Weather impact insight
+    sunny_avg = weather_stats.loc['sunny', 'Avg Rides']
+    rainy_avg = weather_stats.loc['rainy', 'Avg Rides']
+    weather_impact = ((sunny_avg - rainy_avg) / rainy_avg) * 100
+    
+    st.info(f"💡 **Weather Impact Insight**: Sunny weather shows only {weather_impact:.1f}% higher ridership than rainy weather, suggesting Copenhagen cyclists are quite resilient to weather conditions! This indicates a strong cycling culture where people bike regardless of weather.")
 
     st.markdown("---")
 
@@ -336,7 +371,6 @@ def main():
                 'Location': location,
                 'Total Rides': int(top_locations_overall[location]),
                 'Avg Daily': int(daily_rides.mean()),
-                'Days Active': len(daily_rides),
                 'Max Daily': int(daily_rides.max()),
                 'Min Daily': int(daily_rides.min())
             })
