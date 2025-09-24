@@ -1,6 +1,6 @@
 # Copenhagen Bike & Weather Data Pipeline
 
-[View Live Dashboard](https://copenhagen-bike-pipeline.streamlit.app/) | [Github Repo](https://github.com/luxyoga) | [LinkedIn](https://www.linkedin.com/in/luxyoga/) 
+<a href="https://copenhagen-bike-pipeline.streamlit.app/" target="_blank">Live Dashboard</a> | <a href="https://github.com/luxyoga" target="_blank">Github</a> | <a href="https://www.linkedin.com/in/luxyoga/" target="_blank">LinkedIn</a> 
 
 This project builds an end-to-end data engineering pipeline to analyze cycling traffic in Copenhagen and its relationship with weather conditions.
 
