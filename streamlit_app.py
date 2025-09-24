@@ -170,12 +170,15 @@ def main():
                 y=top_locations_month.index,
                 orientation='h',
                 title=f"Top 10 Cycling Locations - {selected_year_month}",
-                height=600
+                height=600,
+                color=top_locations_month.values,
+                color_continuous_scale=px.colors.sequential.Viridis
             )
             fig_top.update_layout(
                 xaxis_title=f"Total Rides ({selected_year_month})",
                 yaxis_title="Location",
-                yaxis={'categoryorder':'total ascending'}
+                yaxis={'categoryorder':'total ascending'},
+                showlegend=False
             )
             st.plotly_chart(fig_top, use_container_width=True)
         
@@ -219,11 +222,14 @@ def main():
             x='season', 
             y='total',
             title="Total Rides by Season (2005-2014)",
-            height=400
+            height=400,
+            color='season',
+            color_discrete_sequence=px.colors.qualitative.Set3
         )
         fig_season.update_layout(
             xaxis_title="Season",
-            yaxis_title="Total Rides"
+            yaxis_title="Total Rides",
+            showlegend=False
         )
         st.plotly_chart(fig_season, use_container_width=True)
     
@@ -233,11 +239,14 @@ def main():
             x='season', 
             y='avg_daily',
             title="Average Daily Rides by Season (2005-2014)",
-            height=400
+            height=400,
+            color='season',
+            color_discrete_sequence=px.colors.qualitative.Set3
         )
         fig_season_avg.update_layout(
             xaxis_title="Season",
-            yaxis_title="Average Daily Rides"
+            yaxis_title="Average Daily Rides",
+            showlegend=False
         )
         st.plotly_chart(fig_season_avg, use_container_width=True)
 
@@ -256,11 +265,14 @@ def main():
         x='temp_bin',
         y='total',
         title="Average Rides by Temperature Range (2005-2014)",
-        height=400
+        height=400,
+        color='temp_bin',
+        color_discrete_sequence=px.colors.sequential.RdYlBu_r
     )
     fig_temp.update_layout(
         xaxis_title="Temperature Range",
-        yaxis_title="Average Daily Rides"
+        yaxis_title="Average Daily Rides",
+        showlegend=False
     )
     st.plotly_chart(fig_temp, use_container_width=True)
     
@@ -274,12 +286,15 @@ def main():
         x='precip_bin',
         y='total',
         title="Average Rides by Precipitation Level (2005-2014)",
-        height=400
+        height=400,
+        color='precip_bin',
+        color_discrete_sequence=px.colors.sequential.Blues
     )
     fig_precip.update_layout(
         xaxis_title="Precipitation Level",
         yaxis_title="Average Daily Rides",
-        xaxis={'tickangle': 45}
+        xaxis={'tickangle': 45},
+        showlegend=False
     )
     st.plotly_chart(fig_precip, use_container_width=True)
 
@@ -298,12 +313,15 @@ def main():
             y=top_locations_overall.index,
             orientation='h',
             title="Top 20 Cycling Locations (2005-2014)",
-            height=600
+            height=600,
+            color=top_locations_overall.values,
+            color_continuous_scale=px.colors.sequential.Plasma
         )
         fig_overall.update_layout(
             xaxis_title="Total Rides (10 Years)",
             yaxis_title="Location",
-            yaxis={'categoryorder':'total ascending'}
+            yaxis={'categoryorder':'total ascending'},
+            showlegend=False
         )
         st.plotly_chart(fig_overall, use_container_width=True)
     
