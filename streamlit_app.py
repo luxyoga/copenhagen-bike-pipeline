@@ -89,12 +89,12 @@ def get_data():
     return pd.DataFrame(data)
 
 def main():
-st.title("🚴‍♂️ Copenhagen Bike Analytics")
+    st.title("🚴‍♂️ Copenhagen Bike Analytics")
     st.markdown("**Real Copenhagen Cycling Data Analysis (2005-2014)**")
 
-# Load data
+    # Load data
     with st.spinner("Loading Copenhagen cycling data..."):
-    df = get_data()
+        df = get_data()
 
     # Overview metrics
     st.header("📊 Overview")
