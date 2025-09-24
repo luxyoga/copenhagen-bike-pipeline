@@ -1,4 +1,4 @@
-# 🚴‍♂️ Copenhagen Bike & Weather Data Pipeline
+# Copenhagen Bike & Weather Data Pipeline
 
 This project builds an end-to-end data engineering pipeline to analyze cycling traffic in Copenhagen and its relationship with weather conditions.
 
