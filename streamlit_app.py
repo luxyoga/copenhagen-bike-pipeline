@@ -267,7 +267,7 @@ def main():
         title="Average Rides by Temperature Range (2005-2014)",
         height=400,
         color='temp_bin',
-        color_discrete_sequence=['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4']
+        color_discrete_sequence=['#1E3A8A', '#3B82F6', '#F59E0B', '#EF4444']
     )
     fig_temp.update_layout(
         xaxis_title="Temperature Range",
