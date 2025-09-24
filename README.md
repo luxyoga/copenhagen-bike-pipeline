@@ -30,7 +30,6 @@ This project demonstrates a complete data engineering pipeline using modern tool
 From the processed data:
 - Sunny weather shows only 16.6% higher ridership than rainy weather, suggesting Copenhagen cyclists are quite resilient to weather conditions! This indicates a strong cycling culture where people bike regardless of weather.
 - 53,310 rides per day across all locations
-- 194,686,937 bike rides across all locations
 - Clear location-based differences in traffic volumes.
 - Data Coverage: 55 monitoring locations
 - 194,686,937 bike rides across all locations in 10 years.
