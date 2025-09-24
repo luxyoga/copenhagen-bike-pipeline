@@ -73,18 +73,18 @@ From the processed data:
 
 ## **Data Pipeline**
 
-### 1. **Data Ingestion**
+### 1. **Ingestion**
 - Downloads real Copenhagen cycling data from Kaggle
 - Fetches historical weather data from Open-Meteo API
 - Processes and cleans raw data
 
-### 2. **Data Processing**
+### 2. **Processing**
 - **PySpark transformations** for distributed processing
 - **Daily aggregation** of bike counts by location
 - **Weather integration** with temperature, precipitation, and conditions
 - **Seasonal analysis** and pattern detection
 
-### 3. **Data Visualization**
+### 3. **Visualization**
 - **Interactive dashboard** with monthly breakdowns
 - **Weather impact analysis** with correlation charts
 - **Location-based insights** and trends
