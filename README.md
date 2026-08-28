@@ -15,12 +15,15 @@ If you're planning cycling infrastructure in Copenhagen, where and when matter e
 ## What I'd recommend
 
 **Concentrate capacity investment in the six-station core.**<br>
+
 Kongens Have, Østerbro Station, Kongens Nytorv, Vesterbro Station, Nørrebro Station and Rådhuspladsen each carry between 6.35M and 6.41M rides over the ten-year window. They're 11% of the monitoring network and 19.6% of total volume, and they run at almost exactly double the next tier of stations, which cluster tightly around 3.21M. That gap is stable rather than noisy, so it's a reliable basis for prioritising spend.
 
 **Size for summer peaks, not for average days.**<br>
+
 The busiest single day in the dataset hit 92,441 rides on 26 July 2010, which is 1.73 times the network's 53,293 daily average. Summer is the binding constraint on capacity, and infrastructure sized to the annual mean will be under pressure for a third of the year.
 
 **Drop weather from the planning model.**<br>
+
 There's no case for weather-contingent staffing, maintenance windows, or temporary capacity adjustment. The effect isn't just small, it's close to undetectable in two of the three ways I cut it. Planning effort spent here is effort not spent on the two variables that actually move volume.
 
 ## The evidence
