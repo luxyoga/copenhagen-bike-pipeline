@@ -128,12 +128,18 @@ copenhagen-bike-pipeline/
 ├── requirements.txt
 └── README.md
 ```
-
 ## Tech stack
 
-Apache Airflow (orchestration and scheduling), Apache PySpark (distributed ETL), PostgreSQL (storage), Streamlit (visualisation), Docker (containerised deployment).
+- **Apache Airflow** for workflow orchestration and scheduling
+- **Apache PySpark** for distributed ETL and aggregation
+- **PostgreSQL** for storage of modelled output and pipeline metadata
+- **Streamlit** for the interactive dashboard
+- **Docker** for containerised, reproducible deployment
 
-Data sources: Kaggle bike traffic counts for Copenhagen, Open-Meteo API for historical weather, 2005 to 2014.
+**Data sources**
+
+- Kaggle bike traffic counts for Copenhagen, 2005 to 2014
+- Open-Meteo API for historical weather
 
 ## Run it locally
 
